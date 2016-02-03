@@ -1,0 +1,25 @@
+<hr>
+<h1>Main Panel</h1>
+<hr>
+<h4><strong>Here you can see the avaliable boxes, envoriments and Vagrantfiles.</h4></strong>
+
+<h3>System info</h3>
+<ul>
+	<li>Vagrant version: {{ sysinfo.vagrant_version }}</li>
+	<li>Virtualbox version: {{ sysinfo.virtualbox_version }}</li>
+</ul>
+<hr>
+
+<h3>Vagrant boxes</h3>
+<ul>
+{% for box in all_boxes  %}
+	<li>{{ box }}</li>
+{% endfor  %}
+</ul>
+
+<h3>Vagrant enviroments</h3>
+<ul>
+{% for env in all_envs  %}
+	<li>{{ env }}</li>
+{% endfor  %}
+</ul>
