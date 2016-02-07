@@ -13,7 +13,7 @@
 <h3>Vagrant boxes</h3>
 <ul>
 {% for box in all_boxes  %}
-	<li>{{ box }}</li>
+	<li>Name: {{ box.name }} | Provider: {{ box.provider }} | Version: {{ box.version }}</li>
 {% endfor  %}
 </ul>
 

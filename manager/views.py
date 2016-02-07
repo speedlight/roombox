@@ -3,14 +3,12 @@ from django.http import HttpResponse
 from django.template import loader
 
 import subprocess
-import shlex
-import json
+from .scripts.vagrant_boxes import _box_list
 
 def index(request):
     sysinfo = systeminfo()
-    vboxes = vboxeslist()
+    vboxes = _box_list()
     venvs = venvslist()
-    print(sysinfo)
 
     return render(request, 'manager/index.html', {'all_boxes': vboxes, 'all_envs': venvs, 'sysinfo': sysinfo, })
 
@@ -29,17 +27,7 @@ def systeminfo():
     return sysinfo
 
 def vboxeslist():
-    vboxlist = subprocess.check_output('vagrant box list --machine-readable', shell=True, universal_newlines=True)
-    vboxes_list = [line.split(',', 4) for line in vboxlist.splitlines() if line.strip()]
-    vboxes_list = list(filter(lambda x: x[2] != "ui", vboxes_list))
-
-    #vboxes_array = [ shlex.split(x) for x in vboxes.rstrip().split('\n') ]
-    #vboxes_array_to_json = {}
-    #vboxes_array_len = vboxes_array[:].__len__()
-    #vboxes_array_to_json["vagrant boxes"] = vboxes_array
-    #vboxes = []
-    #count = vboxes_list.__len__()
-
+    vboxes_list = vagrant_boxes_list(vagrant_boxes)
     return vboxes_list
 
 def venvslist():
