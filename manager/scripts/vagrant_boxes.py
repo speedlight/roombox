@@ -1,3 +1,5 @@
+from django.conf import settings
+
 import subprocess
 import collections
 
@@ -59,11 +61,10 @@ def _box_list():
             provider = data
         elif field == 'box-version':
             version = data
-
     if name is not None:
         boxes.append(Box(name=name, provider=provider, version=version))
 
-    return print(boxes)
+    return boxes
 
 def _global_status():
     cmd = ['global-status', '--machine-readable']
@@ -76,11 +77,25 @@ def _global_status():
     vagrant_status = []
     Vagrant_Status = collections.namedtuple('Environment', ['uid', 'name', 'provider', 'state', 'path'])
 
+    # get data field into a new list and then splitit evenly 
+    # for have the status of each machine in each line list.
+    # i.e input:
+    #           parsed_lines = ['9a44804  ', 'master   ', 'virtualbox ', 'poweroff ', '/home/speedlight/Vagrant/vagrant-salt  ', 'd4e6800  ', 'minion01 ', 'virtualbox ', 'poweroff ', '/home/speedlight/Vagrant/vagrant-salt  ']
+    # output:
+    #           new_parsed_lines = [['9a44804  ', 'master   ', 'virtualbox ', 'poweroff ', '/home/speedlight/Vagrant/vagrant-salt  '], ['d4e6800  ', 'minion01 ', 'virtualbox ', 'poweroff ', '/home/speedlight/Vagrant/vagrant-salt  ']]
+
+    temp_lst = []
     uid = name = provider = state = path = None
     for timestamp, extra, ui, info, data in parsed_lines:
         if data is not None:
-            vagrant_status.append(Vagrant_Status(uid=uid, name=name, provider=provider, state=state, path=path))
-            print(data)
+            temp_lst.append(data)
+    parsed_lines = [temp_lst[x:x+5] for x in range(0, len(temp_lst), 5)]
+    
+    for line in parsed_lines:
+        vagrant_status.append(Vagrant_Status(*line))
 
+    # vagrant_status.append(Vagrant_Status(uid=uid, name=name, provider=provider, state=state, path=path))
 
-    print(vagrant_status)
+    # print('-' * 80)
+    # print(temp_lst)
+    return vagrant_status
