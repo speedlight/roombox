@@ -3,12 +3,12 @@ from django.http import HttpResponse
 from django.template import loader
 
 import subprocess
-from .scripts.vagrant_boxes import _box_list
+from .scripts.vagrant_boxes import _box_list, _global_status
 
 def index(request):
     sysinfo = systeminfo()
     vboxes = _box_list()
-    venvs = venvslist()
+    venvs = _global_status()
 
     return render(request, 'manager/index.html', {'all_boxes': vboxes, 'all_envs': venvs, 'sysinfo': sysinfo, })
 
@@ -25,14 +25,3 @@ def systeminfo():
     sysinfo["virtualbox_version"] = virtualbox_ver
 
     return sysinfo
-
-def vboxeslist():
-    vboxes_list = vagrant_boxes_list(vagrant_boxes)
-    return vboxes_list
-
-def venvslist():
-    venvlist = subprocess.check_output('vagrant global-status ', shell=True, universal_newlines=True)
-    venvs_list = [line.split(',', 4) for line in venvlist.splitlines() if line.strip()]
-
-    return venvs_list
-

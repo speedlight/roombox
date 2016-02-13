@@ -16,8 +16,6 @@ def run(*args):
     '''
     run attribute for runscript (python-extensions)
     '''
-    if 'vagrant_boxes' in args:
-        print(vagrant_boxes_list())
     if 'box_list' in args:
         _box_list()
     if 'global_status' in args:
@@ -31,6 +29,15 @@ def _vagrant_command(args):
     '''
     command = _args_to_str(args)
     vagrant_cmd = subprocess.check_output(command, shell=True, universal_newlines=True)
+    return vagrant_cmd
+
+def _vagrant_call_command(args):
+    '''
+    Return None on a sucessfull vagrant command,
+    agrs are in list format:
+    '''
+    command = _args_to_str(args)
+    vagrant_cmd = subprocess.check_call(command, shell=True, universal_newlines=True)
     return vagrant_cmd
 
 def _args_to_str(args):
@@ -94,8 +101,25 @@ def _global_status():
     for line in parsed_lines:
         vagrant_status.append(Vagrant_Status(*line))
 
-    # vagrant_status.append(Vagrant_Status(uid=uid, name=name, provider=provider, state=state, path=path))
-
-    # print('-' * 80)
-    # print(temp_lst)
     return vagrant_status
+
+def _add_box(args, provider=False, force=False):
+    """
+    Add a box in vagrant.
+    args argument is in format: ['box-name', 'user/box-name']
+    method call is i.e like: _add_box(args, 'virtuabox', force')
+    if there
+    """
+    cmd = ['box', 'add']
+    if not provider:
+        cmd.append('--provider ' + str(provider))
+    if not force:
+        cmd.append('--force')
+    
+    if len(args) == 2:
+        cmd.append('--name ' + str(args[0]))
+        cmd.append(args[1])
+    else:
+        cmd.append(args[0])
+
+    return _vagrant_call_command(cmd)

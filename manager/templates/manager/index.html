@@ -1,7 +1,7 @@
 <hr>
 <h1>Main Panel</h1>
 <hr>
-<h4><strong>Here you can see the avaliable boxes, envoriments and Vagrantfiles.</h4></strong>
+<h4><strong>Here you can see the avaliable boxes, environments and Vagrantfiles.</h4></strong>
 
 <h3>System info</h3>
 <ul>
@@ -20,6 +20,7 @@
 <h3>Vagrant enviroments</h3>
 <ul>
 {% for env in all_envs  %}
-	<li>{{ env }}</li>
+	<li>Id: {{ env.uid }} | Name: {{ env.name }} | Provider: {{ env.provider }} | State: {{ env.state }} | Path: {{ env.path }}
+	</li>
 {% endfor  %}
 </ul>
