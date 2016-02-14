@@ -1,26 +1,97 @@
-<hr>
-<h1>Main Panel</h1>
-<hr>
-<h4><strong>Here you can see the avaliable boxes, environments and Vagrantfiles.</h4></strong>
+{% load bootstrap3 %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'main.css' %}" />
 
-<h3>System info</h3>
-<ul>
-	<li>Vagrant version: {{ sysinfo.vagrant_version }}</li>
-	<li>Virtualbox version: {{ sysinfo.virtualbox_version }}</li>
-</ul>
-<hr>
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
 
-<h3>Vagrant boxes</h3>
-<ul>
-{% for box in all_boxes  %}
-	<li>Name: {{ box.name }} | Provider: {{ box.provider }} | Version: {{ box.version }}</li>
-{% endfor  %}
-</ul>
+{% block bootstrap3_content %}
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Roombox</a>
+			</div>
 
-<h3>Vagrant enviroments</h3>
-<ul>
-{% for env in all_envs  %}
-	<li>Id: {{ env.uid }} | Name: {{ env.name }} | Provider: {{ env.provider }} | State: {{ env.state }} | Path: {{ env.path }}
-	</li>
-{% endfor  %}
-</ul>
+            <div class="collapse navbar-collapse" id="roombox-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div>
+	</nav>
+
+
+{% block content %}
+	<div class="container-fluid main-container">
+		<div class="col-md-10 content">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+                    System info
+				</div>
+                <div class="panel-body">
+                    <ul>
+                        <li>Vagrant version: {{ versions.vagrant_version }}</li>
+                        <li>Virtualbox version: {{ versions.virtualbox_version }}</li>
+                       </ul>
+				</div>
+			</div>
+				
+			<div class="panel panel-default">
+                <div class="panel-heading">
+                    Vagrant boxes
+				</div>
+                <div class="panel-body">
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Provider</th>
+                            <th>Version</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+				        {% for box in all_boxes  %}
+                        <tr>
+                            <td>{{ box.name }}</td>
+                            <td>{{ box.provider }}</td>
+                            <td>{{ box.version }}</td>
+                        </tr>
+                        {% endfor  %}
+                    </tbody>
+                </table>
+             </div>
+				
+			<div class="panel panel-default">
+                <div class="panel-heading">
+                    Vagrant enviroments
+				</div>
+                <div class="panel-body">
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Provider</th>
+                            <th>State</th>
+                            <th>Path</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+				        {% for env in all_envs  %}
+                        <tr>
+                            <td>{{ env.uid }}</td>
+                            <td>{{ env.name }}</td>
+                            <td>{{ env.provider }}</td>
+                            <td>{{ env.state }}</td>
+                            <td>{{ env.path }}</td>
+                        </tr>
+                        {% endfor  %}
+                    </tbody>
+                </table>
+             </div>
+		</div>
+    </div><!-- container-fluid main-container -->
+{% endblock %}{% endblock %}

@@ -123,3 +123,17 @@ def _add_box(args, provider=False, force=False):
         cmd.append(args[0])
 
     return _vagrant_call_command(cmd)
+
+def _deps_versions():
+    deps_vers = {}
+    vagrant_ver = subprocess.check_output('vagrant --version', shell=True, universal_newlines=True)
+    vagrant_ver = vagrant_ver.strip('\n')
+    vagrant_ver = vagrant_ver.split(' ')
+
+    virtualbox_ver = subprocess.check_output("virtualbox --help |head -n1 |cut -d ' ' -f 5 |cut -d '_' -f 1", shell=True, universal_newlines=True)
+    virtualbox_ver = virtualbox_ver.strip('\n')
+
+    deps_vers["vagrant_version"] = vagrant_ver[1]
+    deps_vers["virtualbox_version"] = virtualbox_ver
+
+    return deps_vers
