@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 from subprocess import CalledProcessError
 
 from .scripts.vagrant_boxes import _box_list, _global_status, _add_box
@@ -12,11 +13,13 @@ Environment = collections.namedtuple('Environment', ['uid', 'name', 'provider', 
 
 TEST_URL = ['speedlight/jessie-vbguest']
 TEST_BOX = Box(name='speedlight/jessie-vbguest', provider='virtualbox', version='8.3.0')
+MIN_VBOX_VERSION = '5.0.14'
+MIN_VAGRANT_VERSION = '1.8.1'
 
 box_list = _box_list()
 global_list = _global_status()
 
-class CheckOutputVagrantCommands(TestCase):
+class VagrantBoxesScriptTests(TestCase):
 
     @unittest.skip("not yet")
     def test_add_box(self):
@@ -44,4 +47,41 @@ class CheckOutputVagrantCommands(TestCase):
         """
         self.assertEqual(isinstance(global_list, list), True)
         self.assertEqual(type(global_list[0]).__name__, 'Environment')
+
+class ManagerIndexViewTest(TestCase):
+    def test_index_view_versions(self):
+        """
+        Test that versions are shown,
+        and minimal versions are met.
+        """
+        response = self.client.get(reverse('manager:index'))
+        self.assertEqual(response.status_code, 200)
+
+        min_versions = False
+        versions = response.context['versions']
+        vbox_version = versions['virtualbox_version']
+        vagrant_version = versions['vagrant_version']
+        if vbox_version >= MIN_VBOX_VERSION and vagrant_version >= MIN_VAGRANT_VERSION:
+            min_versions = True
+        self.assertEqual(min_versions, True)
+
+    def test_index_view_box_list(self):
+        """
+        TEST_BOX info are shown in the view.
+        """
+        response = self.client.get(reverse('manager:index'))
+        self.assertEqual(response.status_code, 200)
+
+        test_boxes = response.context['all_boxes']
+        self.assertEqual(TEST_BOX in test_boxes, True)
+
+    def test_index_view_global_status(self):
+        """
+        TEST_BOX info are shown in the view.
+        """
+        response = self.client.get(reverse('manager:index'))
+        self.assertEqual(response.status_code, 200)
+
+        test_boxes = response.context['all_envs']
+        # self.assertEqual(TEST_BOX in test_boxes, True)
 
