@@ -1,7 +1,9 @@
 from django.conf import settings
 
+import os
 import subprocess
 import collections
+import tempfile
 
 '''
 Module to get information (output) of Vagrant,
@@ -10,6 +12,9 @@ i.e for django views/templates
 
 _box_list.- 'vagrant box list --machine-readable' output
 _global_status.- 'vagrant global-status
+_add_box.- 'vagrant box add ...'
+_deps_versions.- checks vbox and vagrant versions'
+_init_env.-'vagrant init -m -f TEST_ENV'
 '''
 
 def run(*args):
@@ -31,12 +36,12 @@ def _vagrant_command(args):
     vagrant_cmd = subprocess.check_output(command, shell=True, universal_newlines=True)
     return vagrant_cmd
 
-def _vagrant_call_command(args):
+def _vagrant_call_command(cmd, *args):
     '''
     Return None on a sucessfull vagrant command,
-    agrs are in list format:
+    cmd is in list format.
     '''
-    command = _args_to_str(args)
+    command = _args_to_str(cmd)
     vagrant_cmd = subprocess.check_call(command, shell=True, universal_newlines=True)
     return vagrant_cmd
 
@@ -122,6 +127,18 @@ def _add_box(args, provider=False, force=False):
     else:
         cmd.append(args[0])
 
+    return _vagrant_call_command(cmd)
+
+def _init_env(boxname, path, *args):
+    pass
+    """
+    Run vagrant init in temp location
+    to create a minimal Vagrantfile with TEST_ENV as box-name
+    """
+    cmd = ['init', '-m', '-f']
+    cmd.append(str(boxname))
+    if path:
+        cmd.append('--output ' + str(path) + '/Vagrantfile')
     return _vagrant_call_command(cmd)
 
 def _deps_versions():

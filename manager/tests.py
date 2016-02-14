@@ -2,8 +2,10 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from subprocess import CalledProcessError
 
-from .scripts.vagrant_boxes import _box_list, _global_status, _add_box
+from .scripts.vagrant_boxes import _box_list, _global_status, _add_box, _init_env
 
+import os
+import tempfile
 import unittest
 import collections
 import subprocess
@@ -11,6 +13,7 @@ import subprocess
 Box = collections.namedtuple('Box', ['name', 'provider', 'version'])
 Environment = collections.namedtuple('Environment', ['uid', 'name', 'provider', 'state', 'path'])
 
+TEST_BOXNAME = 'speedlight/jessie-vbguest'
 TEST_URL = ['speedlight/jessie-vbguest']
 TEST_BOX = Box(name='speedlight/jessie-vbguest', provider='virtualbox', version='8.3.0')
 MIN_VBOX_VERSION = '5.0.14'
@@ -28,6 +31,15 @@ class VagrantBoxesScriptTests(TestCase):
         _add_box() should return exit code 0 (zero).
         """
         self.assertEqual(_add_box(TEST_BOX, 'force'), 0)
+
+    def test_init_env(self):
+        """
+        _init_env should return exit code 0 (zero)
+        the tmpdir is removed at finish.
+        """
+        with tempfile.TemporaryDirectory() as tmpdir:
+            self.assertEqual(_init_env(TEST_BOXNAME, tmpdir), 0)
+        # os.rmdir(tmpdir)
 
     def test_box_list_valid_output(self):
         """
