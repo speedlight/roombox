@@ -108,38 +108,79 @@ def _global_status():
 
     return vagrant_status
 
-def _add_box(args, provider=False, force=False):
+def _add_box(opts, provider=False, force=False):
     """
     Add a box in vagrant.
-    args argument is in format: ['box-name', 'user/box-name']
+    opts argument is in format: ['box-name', 'user/box-name']
     method call is i.e like: _add_box(args, 'virtuabox', force')
-    if there
     """
     cmd = ['box', 'add']
-    if not provider:
+    if provider is not False:
         cmd.append('--provider ' + str(provider))
     if not force:
         cmd.append('--force')
     
-    if len(args) == 2:
-        cmd.append('--name ' + str(args[0]))
-        cmd.append(args[1])
+    if len(opts) == 2:
+        cmd.append('--name ' + str(opts[0]))
+        cmd.append(opts[1])
     else:
-        cmd.append(args[0])
+        cmd.append(opts[0])
+
+    return _vagrant_call_command(cmd)
+
+def _remove_box(opts, provider=False, force=False):
+    """
+    Remove a box from vagrant.
+    opts argument is in format: 'box-name'
+    method call is i.e like: _remove_box(args, 'virtuabox', force')
+    """
+    cmd = ['box', 'remove']
+    if provider is not False:
+        cmd.append('--provider ' + str(provider))
+    if not force:
+        cmd.append('--force')
+    
+    cmd.append(opts)
 
     return _vagrant_call_command(cmd)
 
 def _init_env(boxname, path, *args):
-    pass
     """
-    Run vagrant init in temp location
-    to create a minimal Vagrantfile with TEST_ENV as box-name
+    Run vagrant init with minimal -m and force -f opts
+    the boxname arg is for set the 'config.vm.box=boxname' option
+    see: http://www.vagrantup.com/docs
     """
-    cmd = ['init', '-m', '-f']
+    cmd = ['init', '-mf']
     cmd.append(str(boxname))
     if path:
-        cmd.append('--output ' + str(path) + '/Vagrantfile')
-    return _vagrant_call_command(cmd)
+        print("-" * 20 + " VAGRANT INIT " + "-" * 20)
+        os.chdir(path)
+        # cmd.append('--output ' + str(path) + '/Vagrantfile')
+        return _vagrant_call_command(cmd)
+
+def _box_up(path, *args):
+    """
+    Run vagrant up
+    """
+    cmd = ['up']
+    if not os.path.isdir(path):
+        print("Path does not exist, please give a valid directory path")
+    else:
+        if os.path.isfile(os.path.join(path, 'Vagrantfile')):
+            print("-" * 20 + " VAGRANT UP " + "-" * 20)
+            return _vagrant_call_command(cmd)
+
+def _box_destroy(path, *args):
+    """
+    Run vagrant destroy
+    """
+    cmd = ['destroy', '-f']
+    if not os.path.isdir(path):
+        print("Path does not exist, please give a valid directory path")
+    else:
+        print("-" * 20 + " VAGRANT DESTROY " + "-" * 20)
+        return _vagrant_call_command(cmd)
+
 
 def _deps_versions():
     deps_vers = {}
