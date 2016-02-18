@@ -1,5 +1,6 @@
 # ROOMBOX CHANGELOG
 
+* 'vagrant init' command in vagrant\_boxes.py and test.
 * Various view tests for 'manager/index' view
 * 'bootsrap3' added in INSTALLED\_APPS
 * 'manager' module in the django dir structure
