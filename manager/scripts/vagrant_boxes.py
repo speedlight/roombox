@@ -13,6 +13,9 @@ i.e for django views/templates
 _box_list.- 'vagrant box list --machine-readable' output
 _global_status.- 'vagrant global-status
 _add_box.- 'vagrant box add ...'
+_remove_box.-  'vagrant box remove ...'
+_box_up.- 'vagrant up'
+_box_destroy.- 'vagrant destroy'
 _deps_versions.- checks vbox and vagrant versions'
 _init_env.-'vagrant init -m -f TEST_ENV'
 '''
