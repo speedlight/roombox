@@ -1,2 +1,2 @@
-bootstrap3>=6.2.2
+django-bootstrap3>=6.2.2
 coverage>=4.0.3
