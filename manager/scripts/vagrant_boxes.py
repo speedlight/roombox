@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: iso-8859-15
+
 from django.conf import settings
 
 import os
