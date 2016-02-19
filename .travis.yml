@@ -13,7 +13,7 @@ before_install:
 install:
   - sudo -H pip install "pip>8.0.0" wheel
   - sudo -H pip install "$DJANGO" "coverage==4.0.3"
-  - sudo -H pip install .
+  #- sudo -H pip install .
 branches:
   only:
     - travis-ci
