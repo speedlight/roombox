@@ -12,7 +12,7 @@ before_install:
   - sudo apt-get install -qq vagrant 
 install:
   - sudo -H pip install "pip>8.0.0" wheel
-  - sudo -H pip install "$DJANGO" "coverage==4.0.3"
+  - sudo -H pip install "$DJANGO"
   - sudo -H pip install -r requeriments.txt
 branches:
   only:
