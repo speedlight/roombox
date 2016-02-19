@@ -10,7 +10,8 @@ env:
   - DJANGO=1.9
 before_install:
   - sudo apt-get update -q
-  - sudo apt-get install -qq vagrant virtualbox virtualbox-dkms 
+  - sudo apt-get install -qq virtualbox --fix-missing
+  - sudo apt-get install -qq vagrant 
 install:
   - pip install "pip>8.0.0" wheel
   - pip install "$DJANGO" "coverage=4.0.3"
