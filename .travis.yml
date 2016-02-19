@@ -1,3 +1,4 @@
+sudo: false
 lenguage: python
 python:
   - "3.2"
@@ -11,6 +12,7 @@ before-install:
   - sudo apt-get update -q
   - sudo apt-get install -qq vagrant virtualbox virtualbox-dkms 
 install:
+  - pip install "pip>8.0.0" wheel
   - pip install "$DJANGO" "coverage=4.0.3"
   - pip install .
 branches:
