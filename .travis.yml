@@ -17,6 +17,8 @@ install:
 branches:
   only:
     - travis-ci
-script: python3 manage.py test manager
+script:
+  - python3 manage.py test manager
+  - coverage run --source='.' manage.py test manager
 after_sucess:
   - coverage report
