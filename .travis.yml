@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 lenguage: python
 python:
   - "3.2"
@@ -8,7 +8,7 @@ python:
   - "3.5-dev"
 env:
   - DJANGO=1.9
-before-install:
+before_install:
   - sudo apt-get update -q
   - sudo apt-get install -qq vagrant virtualbox virtualbox-dkms 
 install:
