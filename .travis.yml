@@ -11,9 +11,9 @@ before_install:
   - sudo apt-get install -qq virtualbox --fix-missing
   - sudo apt-get install -qq vagrant 
 install:
-  - sudo -H pip3 install "pip>8.0.0" wheel
-  - sudo -H pip3 install "$DJANGO"
-  - sudo -H pip3 install -r requeriments.txt
+  - sudo -H pip install "pip>8.0.0" wheel
+  - sudo -H pip install "$DJANGO"
+  - sudo -H pip install -r requeriments.txt
 branches:
   only:
     - travis-ci
