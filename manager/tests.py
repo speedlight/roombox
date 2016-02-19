@@ -16,8 +16,8 @@ Environment = collections.namedtuple('Environment', ['uid', 'name', 'provider', 
 TEST_BOXNAME = 'local-jessie'
 TEST_ADDBOX = ['local-jessie', '$HOME/gitdown/boxes/local-jessie-amd64.box']
 TEST_URL = ['speedlight/jessie-vbguest']
-# TEST_BOX = Box(name='speedlight/jessie-vbguest', provider='virtualbox', version='8.3.0')
-TEST_BOX = Box(name='local-jessie', provider='virtualbox', version='0')
+TEST_BOX = Box(name='speedlight/jessie-vbguest', provider='virtualbox', version='8.3.0')
+# TEST_BOX = Box(name='local-jessie', provider='virtualbox', version='0')
 MIN_VBOX_VERSION = '5.0.14'
 MIN_VAGRANT_VERSION = '1.8.1'
 
@@ -32,7 +32,7 @@ class VagrantBoxesScriptTests(TestCase):
         """
         Will download the box from TEST_URL.
         """
-        self.assertEqual(_add_box(TEST_ADDBOX), 0)
+        self.assertEqual(_add_box(TEST_URL), 0)
 
     # @unittest.skip("not yet")
     def test_box_list_valid_output(self):

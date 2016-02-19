@@ -1,13 +1,11 @@
 sudo: required
 lenguage: python
 python:
-  - "3.2"
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.5-dev"
 env:
-  - DJANGO=1.9
+  - DJANGO="Django==1.9"
 before_install:
   - sudo apt-get update -q
   - sudo apt-get install -qq virtualbox --fix-missing
