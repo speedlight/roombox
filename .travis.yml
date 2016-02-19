@@ -1,0 +1,21 @@
+lenguage: python
+python:
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.5-dev"
+env:
+  - DJANGO=1.9
+before-install:
+  - sudo apt-get update -q
+  - sudo apt-get install -qq vagrant virtualbox virtualbox-dkms 
+install:
+  - pip install "$DJANGO" "coverage=4.0.3"
+  - pip install .
+branches:
+  only:
+    - master
+script: coverage run manage.py test manager
+after_sucess:
+  - coverage report
